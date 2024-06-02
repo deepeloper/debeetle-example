@@ -201,7 +201,8 @@ d::dump($_REQUEST);
 d::t("environment|session");
 d::dump($_SESSION);
 d::t("environment|server");
-d::dump($_SERVER);
+// d::dump($_SERVER);
+d::w("Here has to be <code>d::dump(\$_SERVER);</code>", ['htmlEntities' => false]);
 
 trigger_error("User notice");
 trigger_error("User warning", E_USER_WARNING);
@@ -218,7 +219,6 @@ d::be("examples");
 d::be("examples");
 d::be("unknown");
 d::t("benchmarks", null, ["after:reports"]);
-d::w("'total' counted including Debeetle execution time.<br/><br/>");
 d::w(
 "d::getBenchmarks() returns array containing bechmarks labels as keys and array<br/>" .
      "['count' => (int)count of calls, 'total' => (double)total time]."
@@ -428,7 +428,7 @@ d::du(d::getCheckpoints(), "Checkpoints");
       <div class="col-md-4 col-sm-6 margin_bott">
         <div class="our_yoga">
           <figure><img src="images/our_yoga1.png" alt="#"/></figure>
-          <h3>HATHA YOGA</h3>
+          <h3>HATHA YOBA</h3>
           <span>Lorem ipsum dolor sit amet</span>
         </div>
       </div>
@@ -437,7 +437,7 @@ d::du(d::getCheckpoints(), "Checkpoints");
       <div class="col-md-4 col-sm-6">
         <div class="our_yoga">
           <figure><img src="images/our_yoga2.png" alt="#"/></figure>
-          <h3>HATHA YOGA</h3>
+          <h3>HATHA YOBA</h3>
           <span>Lorem ipsum dolor sit amet</span>
         </div>
       </div>
@@ -446,14 +446,14 @@ d::du(d::getCheckpoints(), "Checkpoints");
       <div class="col-md-4 col-sm-6">
         <div class="our_yoga">
           <figure><img src="images/our_yoga3.png" alt="#"/></figure>
-          <h3>HATHA YOGA</h3>
+          <h3>HATHA YOBA</h3>
           <span>Lorem ipsum dolor sit amet</span>
         </div>
       </div>
       <div class="col-md-4 offset-md-4 col-sm-6  margin_top">
         <div class="our_yoga">
           <figure><img src="images/our_yoga4.png" alt="#"/></figure>
-          <h3>HATHA YOGA</h3>
+          <h3>HATHA YOBA</h3>
           <span>Lorem ipsum dolor sit amet</span>
           <a class="read_more yoga_btn" href="Javascript:void(0)"> Read More</a>
         </div>
