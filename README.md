@@ -5,4 +5,4 @@
 Usage example of https://github.com/deepeloper/debeetle.
 
 ## Live demo:
-https://deepelopment.free.nf/debeetle/
+https://deepelopment.free.nf/debeetle/path/to/page/
