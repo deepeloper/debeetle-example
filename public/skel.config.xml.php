@@ -258,7 +258,6 @@
     disableCaching: disable browser caching (JS/CSS).
   -->
   <config name="deepeloper.home" developerMode="true" debug="E_USER_WARNING" disableCaching="true" use="true">
-    <limit source="SERVER" key="HTTP_HOST" value="deepeloper.home" />
     <limit source="SERVER" key="REMOTE_ADDR" value="127.0.0.1" />
   </config>
 
