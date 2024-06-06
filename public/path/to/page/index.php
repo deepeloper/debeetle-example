@@ -83,10 +83,14 @@ function highlight($code)
     d::w(highlight_string("<?php $code", true), ['htmlEntities' => false]);
 }
 
-d::t("examples|common");
+$delay = 100000000;
+d::bs("Delay for $delay nanoseconds");
+time_nanosleep(0, $delay);
+d::be("Delay for $delay nanoseconds");
 
-d::bs("examples");
-d::bs("examples");
+d::bs("Examples");
+
+d::t("examples|common");
 
 d::cp("my checkpoint");
 
@@ -204,32 +208,81 @@ d::t("environment|server");
 // d::dump($_SERVER);
 d::w("Here has to be <code>d::dump(\$_SERVER);</code>", ['htmlEntities' => false]);
 
-trigger_error("User notice");
-trigger_error("User warning", E_USER_WARNING);
-trigger_error("User deprecated", E_USER_DEPRECATED);
-trigger_error("User error", E_USER_ERROR);
+trigger_error("User notice message");
+trigger_error("User warning message", E_USER_WARNING);
+trigger_error("User deprecated message", E_USER_DEPRECATED);
+if (d::getInstance()->isLaunched()) {
+    trigger_error("User error message", E_USER_ERROR);
+}
 if (version_compare(phpversion(), "8", "<")) {
     $_SERVER['undefined']; // E_NOTICE
 }
-$a = 10; foreach ($a as $b) {}// E_WARNING
+$a = 10; foreach ($a as $b) {} // E_WARNING
+if (version_compare(phpversion(), "5.5", "<")) {
+    // PHP 5.4
+//    if (function_exists("mysql_list_dbs")) {
+//        mysql_list_dbs(); // E_DEPRECATED
+//    }
+} else if (version_compare(phpversion(), "5.6", "<")) {
+    // PHP 5.5
+    mcrypt_cbc(MCRYPT_BLOWFISH, "a", "b", MCRYPT_MODE_CBC); // E_DEPRECATED
+} else if (version_compare(phpversion(), "7.0", "<")) {
+    // PHP 5.6
+    class A {
+        function f() { echo get_class($this); }
+    }
+    class B {
+        function f() { A::f(); }
+    }
+    (new B)->f(); // E_DEPRECATED
+} else if (version_compare(phpversion(), "7.1", "<")) {
+    // PHP 7.0
+    password_hash("p", PASSWORD_BCRYPT, ['salt' => "0123456789012345678901"]); // E_DEPRECATED
+} else if (version_compare(phpversion(), "7.2", "<")) {
+    // PHP 7.1
+    mb_ereg_replace("[a]", "b", "aaa", "e"); // E_DEPRECATED
+} else if (version_compare(phpversion(), "7.3", "<")) {
+    // PHP 7.2
+    create_function('$a,$b', 'return "ln($a) + ln($b) = " . log($a * $b);'); // E_DEPRECATED
+} else if (version_compare(phpversion(), "7.4", "<")) {
+    // PHP 7.3
+    strpos("a", 1); // E_DEPRECATED
+} else if (version_compare(phpversion(), "8.0", "<")) {
+    // PHP 7.4
+    is_real(123); // E_DEPRECATED
+} else if (version_compare(phpversion(), "8.1", "<")) {
+    // PHP 8.0
+    get_defined_functions(false); // E_DEPRECATED
+} else if (version_compare(phpversion(), "8.2", "<")) {
+    // PHP 8.1
+    eval('function &test(): void {}'); // E_DEPRECATED
+} else if (version_compare(phpversion(), "8.3", "<")) {
+    // PHP 8.2
+    utf8_encode("string"); // E_DEPRECATED
+} else {
+    // PHP >= 8.3
+    mb_strimwidth("string", 0, -1, $trim_marker = " "); // E_DEPRECATED
+}
+
+d::bs("examples"); // Starting duplicate benchmark.
 
 d::cp("my checkpoint");
 
-d::be("examples");
-d::be("examples");
-d::be("unknown");
+d::be("Examples");
+d::be("Examples"); // Ending already ended benchmark.
+d::be("Invalid"); // Ending invalid benchmark.
 d::t("benchmarks", null, ["after:reports"]);
 d::w(
 "d::getBenchmarks() returns array containing bechmarks labels as keys and array<br/>" .
-     "['count' => (int)count of calls, 'total' => (double)total time]."
+     "['count' => (int) count of calls, 'total' => (double) total time]."
 );
 d::du(d::getBenchmarks(), "Benchmarks");
 d::w(
     "d::getCheckpoints() returns array containing checkpoints labels as keys and array<br/>" .
-    "['count' => (int)count of calls, 'data' (if storeData is true) => [<br/>" .
-    "&nbsp;&nbsp;(double)time to the next call,<br/>" .
-    "&nbsp;&nbsp;(int)memory usage,<br/>" .
-    "&nbsp;&nbsp;(int)peak memory usage<br/>" .
+    "['count' => (int) count of calls, 'data' (if storeData is true) => [<br/>" .
+    "&nbsp;&nbsp;(double) time to the next call,<br/>" .
+    "&nbsp;&nbsp;(int) memory usage,<br/>" .
+    "&nbsp;&nbsp;(int) peak memory usage<br/>" .
     "]]."
 );
 d::du(d::getCheckpoints(), "Checkpoints");
@@ -260,8 +313,6 @@ d::du(d::getCheckpoints(), "Checkpoints");
   <link rel="stylesheet" href="css/style.css">
   <!-- Responsive-->
   <link rel="stylesheet" href="css/responsive.css">
-  <!-- favicon -->
-  <link rel="icon" href="images/favicon.png" type="image/gif" />
   <!-- Scrollbar Custom CSS -->
   <link rel="stylesheet" href="css/jquery.mCustomScrollbar.min.css">
   <!-- Tweaks for older IEs-->
@@ -270,7 +321,7 @@ d::du(d::getCheckpoints(), "Checkpoints");
   <!--[if lt IE 9]>
   <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
   <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script><![endif]-->
-  <link rel="icon" type="image/png" href="images/favicon.png" />
+  <link rel="icon" type="image/png" href="../../../favicon.png" />
 </head>
 <!-- body -->
 <body class="main-layout">
@@ -289,7 +340,7 @@ d::du(d::getCheckpoints(), "Checkpoints");
           <div class="full">
             <div class="center-desk">
               <div class="logo">
-                <a href="index.html"><img src="images/logo.png" alt="#" /></a>
+                <a href="index.html"><img src="images/logo.png?1" alt="#" /></a>
               </div>
             </div>
           </div>
@@ -711,13 +762,13 @@ d::du(d::getCheckpoints(), "Checkpoints");
             <li><a href="#">Home</a></li>
             <li><a href="#"> About</a></li>
             <li><a href="#">Classes</a></li>
-            <li><a href="#">Yoga</a></li>
+            <li><a href="#">Yoba</a></li>
             <li><a href="#">pricing</a></li>
             <li><a href="#">Contact Us</a></li>
           </ul>
         </div>
         <div class=" col-md-3">
-          <h3>TOP Yoga</h3>
+          <h3>TOP Yoba</h3>
           <p class="many">
             There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humou
           </p>
