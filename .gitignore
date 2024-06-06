@@ -1,5 +1,7 @@
 .idea
 vendor/*
+public/_/*
+public/debeetle.php
 composer.lock
 config.xml.php
 config.json.php
