@@ -264,7 +264,7 @@ if (version_compare(phpversion(), "5.5", "<")) {
     mb_strimwidth("string", 0, -1, $trim_marker = " "); // E_DEPRECATED
 }
 
-d::bs("examples"); // Starting duplicate benchmark.
+d::bs("Examples"); // Starting duplicate benchmark.
 
 d::cp("my checkpoint");
 
