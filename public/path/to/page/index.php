@@ -16,39 +16,35 @@ ini_set("display_errors", "1");
 /**
  * Place this struct definition to the every script entry point you will debug.
  */
-$scriptInitState = [
+$requestTime = microtime(true);
+$initState = [
     'serverTime' => isset($_SERVER['REQUEST_TIME']) ? $_SERVER['REQUEST_TIME'] : time(),
-    'time' => isset($_SERVER['REQUEST_TIME_FLOAT']) ? $_SERVER['REQUEST_TIME_FLOAT'] : microtime(true),
+    'requestTime' => isset($_SERVER['REQUEST_TIME_FLOAT']) ? $_SERVER['REQUEST_TIME_FLOAT'] : $requestTime,
+    'time' => $requestTime,
     'memoryUsage' => memory_get_usage(),
-    'peakMemoryUsage' => function_exists('memory_get_peak_usage') ? memory_get_peak_usage() : null,
+    'peakMemoryUsage' => memory_get_peak_usage(),
+    'includedFiles'   => sizeof(get_included_files()) - 1,
     'entryPoint' => [
         'file' => __FILE__,
         'line' => __LINE__,
     ],
 ];
 
-$debeetleInitState = [
-    'time' => microtime(true),
-    'memoryUsage' => memory_get_usage(),
-    'peakMemoryUsage' => function_exists('memory_get_peak_usage') ? memory_get_peak_usage() : null,
-    'includedFiles'   => sizeof(get_included_files()),
-    'entryPoint' => [
-        'file' => __FILE__,
-        'line' => __LINE__,
-    ],
-];
-
-$autoloadPath = realpath("./../../../../vendor/autoload.php");
+$autoloadPath = realpath(
+  in_array($_SERVER['HTTP_HOST'], ["deepeloper.home", "192.168.0.103"])
+      ? "./../../../../../debeetle/vendor/autoload.php"
+      : "./../../../../vendor/autoload.php"
+);
 $configPath = realpath("./../../../config.xml.php");
 require_once $autoloadPath;
 
 try {
     Loader::startup([
         'config' => realpath($configPath),
-        'developerMode' => true, // To see startup errors.
-        'scriptInitState' => $scriptInitState,
-        'initState' => $debeetleInitState,
+        'displayStartupErrors' => true,
+        'initState' => $initState,
     ]);
+    d::getInstance()->addPath(realpath(dirname($autoloadPath) . "/deepeloper"));
     // Add example locales.
     /**
      * @var deepeloper\Debeetle\DebeetleInterface $debeetle
@@ -67,14 +63,7 @@ try {
     unset($debeetle, $settings, $path, $language);
 } catch (Exception $debeetleException) { // @todo Replace with Throwable for PHP >= 7.
 }
-unset($configPath, $vendorPath, $scriptInitState, $debeetleInitState);
-
-/*echo '<pre>';
-echo 'time diff: '; var_dump(microtime(true) - $scriptInitState['time']);
-echo 'included files diff: '; var_dump(sizeof(get_included_files()) - $debeetleInitState['includedFiles']);
-echo 'mem usage diff: '; var_dump(memory_get_usage() - $scriptInitState['memoryUsage']);
-echo 'peak mem usage diff: '; var_dump(memory_get_peak_usage() - $scriptInitState['peakMemoryUsage']);
-echo '</pre>';*/
+unset($configPath, $vendorPath, $initState);
 
 // } Debeetle initialization
 
