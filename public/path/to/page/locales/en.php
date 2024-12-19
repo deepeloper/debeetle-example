@@ -10,7 +10,7 @@ return [
     // Tabs.
     'tab-examples' => "Examples",
     'tab-common' => "Common",
-    'tab-backslashedTabName' => "Backslashed tab name\\\\",
+    'tab-backslashedTabName' => "Backslashed tab name\\",
     'tab-nestedTabs' => "Nested tabs",
     'tab-level3' => "Level 3",
     'tab-level4' => "Level 4",

@@ -17,6 +17,11 @@ ini_set("display_errors", "1");
  * Place this struct definition to the every script entry point you will debug.
  */
 $requestTime = microtime(true);
+$autoloadPath = realpath(
+    in_array($_SERVER['HTTP_HOST'], ["deepeloper.home", "192.168.0.103"])
+        ? "./../../../../../debeetle/vendor/autoload.php"
+        : "./../../../../vendor/autoload.php"
+);
 $initState = [
     'serverTime' => isset($_SERVER['REQUEST_TIME']) ? $_SERVER['REQUEST_TIME'] : time(),
     'requestTime' => isset($_SERVER['REQUEST_TIME_FLOAT']) ? $_SERVER['REQUEST_TIME_FLOAT'] : $requestTime,
@@ -28,13 +33,9 @@ $initState = [
         'file' => __FILE__,
         'line' => __LINE__,
     ],
+    'autoloadPath' => $autoloadPath,
 ];
 
-$autoloadPath = realpath(
-  in_array($_SERVER['HTTP_HOST'], ["deepeloper.home", "192.168.0.103"])
-      ? "./../../../../../debeetle/vendor/autoload.php"
-      : "./../../../../vendor/autoload.php"
-);
 $configPath = realpath("./../../../config.xml.php");
 require_once $autoloadPath;
 
@@ -200,7 +201,7 @@ d::w("Here has to be <code>d::dump(\$_SERVER);</code>", ['htmlEntities' => false
 trigger_error("User notice message");
 trigger_error("User warning message", E_USER_WARNING);
 trigger_error("User deprecated message", E_USER_DEPRECATED);
-if (d::getInstance()->isLaunched()) {
+if (d::getInstance()->isLaunched() && version_compare(phpversion(), "8.2", "<")) {
     trigger_error("User error message", E_USER_ERROR);
 }
 if (version_compare(phpversion(), "8", "<")) {
@@ -310,7 +311,7 @@ d::du(d::getCheckpoints(), "Checkpoints");
   <!--[if lt IE 9]>
   <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
   <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script><![endif]-->
-  <link rel="icon" type="image/png" href="../../../favicon.png" />
+  <link rel="icon" type="image/png" href="../../../favicon.ico" />
 </head>
 <!-- body -->
 <body class="main-layout">
