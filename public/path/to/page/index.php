@@ -18,9 +18,9 @@ ini_set("display_errors", "1");
  */
 $requestTime = microtime(true);
 $autoloadPath = realpath(
-    in_array($_SERVER['HTTP_HOST'], ["deepeloper.home", "192.168.0.103"])
-        ? "./../../../../../debeetle/vendor/autoload.php"
-        : "./../../../../vendor/autoload.php"
+    in_array($_SERVER['HTTP_HOST'], ["deepelopment.home", "192.168.0.103"])
+        ? __DIR__ . "/../../../../../debeetle/vendor/autoload.php"
+        : __DIR__ . "./../../../../vendor/autoload.php"
 );
 $initState = [
     'serverTime' => isset($_SERVER['REQUEST_TIME']) ? $_SERVER['REQUEST_TIME'] : time(),
@@ -56,6 +56,7 @@ try {
         foreach (array_unique([$settings['defaults']['language'], "en"]) as $language) {
             $path = sprintf("%s/locales/%s.php",__DIR__, $language);
             if (file_exists($path)) {
+//                $debeetle->addPath($path);
                 $debeetle->getView()->addLocales(require $path);
                 break;
             }
